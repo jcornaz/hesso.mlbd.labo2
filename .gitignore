@@ -1,16 +1,23 @@
-##########################
-# Standards binary files #
-##########################
+# ================== #
+# Standards binaries #
+# ================== #
 *.exe
 *.bin
+*.dll
 
-###########################
-# Windows generated files #
-###########################
+# ============ #
+# OS generated #
+# ============ #
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
 
-##########
+# ====== #
 # Others #
-##########
+# ====== #
 .*
 !\.gitignore
