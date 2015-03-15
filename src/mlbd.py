@@ -18,24 +18,6 @@ from sklearn.metrics import confusion_matrix
 from pybrain.datasets import ClassificationDataSet
 from sklearn.preprocessing import MultiLabelBinarizer
 
-np.set_printoptions(precision=5, suppress=True)
-
-DIR = '../statement/data/preprocessed/'
-meta = pd.io.pickle.read_pickle(os.path.join(DIR, 'meta.pkl'))
-
-def load_img(name):
-    """Loads the given image by name and returns a masked array"""
-    img = skimage.io.imread(os.path.join(DIR, 'imgs', name + ".png"))
-    img = skimage.img_as_float(img)
-    img = ma.masked_where(img == 0, img)
-    # same mask for all 3 axes
-    mask = np.all(img == 0, axis=2)
-    img = ma.array(img)
-    for i in xrange(img.shape[2]):
-        img.mask[:,:,i] = mask
-    
-    return img
-
 def get_plant_points(img):
     """
     Given the image of a plant, returns a Nx2 array containing the (x, y) coordinate

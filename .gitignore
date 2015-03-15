@@ -11,6 +11,12 @@ data_full/
 *.bin
 *.dll
 
+# ================= #
+# IPython generated #
+# ================= #
+*.pyc
+.ipynb_checkpoints/
+
 # ============ #
 # OS generated #
 # ============ #
