@@ -1,6 +1,40 @@
-from sklearn.decomposition import PCA
+import os
+import cv2 # opencv
+import pandas as pd
+import numpy as np
+import numpy.ma as ma
+import numpy.linalg as la
+import skimage
+import skimage.io
+import pylab as pl
+import matplotlib.cm as cm
 import skimage.draw
+import sklearn.metrics as skmetrics
+import pybrain
+
+from sklearn.decomposition import PCA
 from matplotlib import gridspec
+from sklearn.metrics import confusion_matrix
+from pybrain.datasets import ClassificationDataSet
+from sklearn.preprocessing import MultiLabelBinarizer
+
+np.set_printoptions(precision=5, suppress=True)
+
+DIR = '../statement/data/preprocessed/'
+meta = pd.io.pickle.read_pickle(os.path.join(DIR, 'meta.pkl'))
+
+def load_img(name):
+    """Loads the given image by name and returns a masked array"""
+    img = skimage.io.imread(os.path.join(DIR, 'imgs', name + ".png"))
+    img = skimage.img_as_float(img)
+    img = ma.masked_where(img == 0, img)
+    # same mask for all 3 axes
+    mask = np.all(img == 0, axis=2)
+    img = ma.array(img)
+    for i in xrange(img.shape[2]):
+        img.mask[:,:,i] = mask
+    
+    return img
 
 def get_plant_points(img):
     """
@@ -62,7 +96,7 @@ def get_ellipse_image(yradius, xradius):
     rr, cc = skimage.draw.ellipse(256, 256, yradius=yradius, xradius=xradius, shape=(512, 512))
     img[rr, cc] = 1
     return img
-
+	
 def circumcircle_radius(p1, p2, p3):
     """
     Given 3 points of a triangle, computes the radius of the circumcircle
@@ -140,3 +174,48 @@ def curvature(img, step=10, plot=False, gs=None):
         pl.axis('off')
         
     return cvt
+	
+def plot_confusion_matrix(confmat, labels_names, ax=None, cmap=None):
+    """Utility function to plot a confusion matrix"""
+    if ax is None:
+        ax = pl.subplot(111)
+    cmim = ax.matshow(confmat, interpolation='nearest', cmap=cmap)
+
+    for i in xrange(confmat.shape[0]):
+        for j in xrange(confmat.shape[1]):
+            ax.annotate(str(confmat[i, j]), xy=(j, i),
+                        horizontalalignment='center',
+                        verticalalignment='center',
+                        fontsize=8)
+    ax.set_xticks(np.arange(confmat.shape[0]))
+    ax.set_xticklabels([labels_names[l] for l in xrange(confmat.shape[0])], rotation='vertical')
+    ax.set_yticks(np.arange(confmat.shape[1]))
+    _ = ax.set_yticklabels([labels_names[l] for l in xrange(confmat.shape[1])])
+    ax.set_xlabel('predicted label')
+    ax.xaxis.set_label_position('top')
+    ax.set_ylabel('true label')
+    pl.colorbar(cmim, shrink=0.7, orientation='horizontal', pad=0.01)
+	
+def pybrain_ds_from_Xy(X, y, binarizer):
+    """
+    Args:
+        binarizer: A MultiLabelBinarizer instance
+    """
+    ds = ClassificationDataSet(X.shape[1], nb_classes=len(lencoder.classes_), class_labels=lencoder.classes_)
+    ds.setField('input', X)
+    ds.setField('class', y.reshape(-1, 1))
+    ds.setField('target', binarizer.transform(y.reshape(-1, 1)))
+    
+    #print '--'
+    #print "class  :\n", ds['class'][5:10]
+    #print "target :\n", ds['target'][5:10]
+    #print "y      :\n", y[5:10]
+    
+    return ds
+
+def print_ds(ds):
+    print "Number of training patterns: ", len(ds)
+    print "Input and output dimensions: ", ds.indim, ds.outdim
+    print "First sample (input, target, class):"
+    print ds['input'][10], ds['target'][10], ds['class'][10]
+    print ds['input'][55], ds['target'][55], ds['class'][55]
