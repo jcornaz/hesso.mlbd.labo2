@@ -20,4 +20,4 @@ Thumbs.db
 # Others #
 # ====== #
 .*
-!\.gitignore
+!.gitignore
