@@ -11,6 +11,11 @@ def curvature_hist( img, step=10, plot=False ):
 		pl.hist( c )
 	return pl.histogram( c )[1]
 
+def ratio_hull_concave(img):
+    cnt = extract_contour(img)
+    hull = cv2.convexHull(cnt)
+    return cv2.contourArea(hull)/cv2.contourArea(cnt)
+	
 def extract_features( meta_element ):
 	pass # TODO
 	
