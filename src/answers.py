@@ -15,3 +15,16 @@ def ratio_hull_concave(img):
     cnt = extract_contour(img)
     hull = cv2.convexHull(cnt)
     return cv2.contourArea(hull)/cv2.contourArea(cnt)
+	
+def extract_features( meta_element ):
+	pass # TODO
+	
+def train_knn( features ):
+	for i in range(0,len(meta)-1)
+		feature = extract_features( meta.iloc[i] )
+		# build input matrix
+		# build target matrix
+		
+	# split dataset
+	# normalize dataset
+	# build a classifier
