@@ -7,16 +7,11 @@ import numpy.linalg as la
 import skimage
 import skimage.io
 import pylab as pl
-import matplotlib.cm as cm
 import skimage.draw
-import sklearn.metrics as skmetrics
-import pybrain
 
 from sklearn.decomposition import PCA
 from matplotlib import gridspec
-from sklearn.metrics import confusion_matrix
 from pybrain.datasets import ClassificationDataSet
-from sklearn.preprocessing import MultiLabelBinarizer
 
 DIR = '../statement/data/preprocessed/'
 
