@@ -2,6 +2,8 @@ import mlbd
 import numpy as np
 import pylab as pl
 import cv2
+import copy
+import random
 
 def curvature_hist( img, step=10, plot=False, nbins=10, vmin=0, vmax=0.4):     
    cvt = mlbd.curvature(img, step=step)
@@ -64,21 +66,19 @@ def train_knn( features ):
 	# normalize dataset
 	# build a classifier
 
-def split_tab(features,classes, test_percent=0.25):
-	X_split = int(len(X)*test_percent)
-	y_split = int(len(y)*test_percent)
+def split_tab( features, classes, test_percent=0.3 ):
+	nbTests = int(len(features)*test_percent)
+	
+	X_train = copy.deepcopy(features)
+	y_train = copy.deepcopy(classes)
 	
 	X_test  = []#X[X_split:]
 	y_test  = []#y[y_split:]
 	
-	for i in range(0,X_split):
-		X_test.append(features.pop(random.randrange(len(features))))# pop a random features
-		
-	for i in range(0,y_split):
-		y_test.append(classes.pop(random.randrange(len(classes))))
-
-	X_train = features#X[0:X_split]
-	y_train = classes#y[0:y_split]
+	for i in range(0,nbTests):
+		index = random.randrange(len(X_train))
+		X_test.append(X_train.pop(index))# pop a random features
+		y_test.append(y_train.pop(index))
 	
-	return X_train, X_test, y_train, y_test 
+	return X_train, y_train, X_test, y_test
 
