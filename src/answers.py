@@ -58,10 +58,10 @@ def extract_dataset( meta, labelEncoder ):
 	return features, classes
 	
 def train_knn( features, classes ):
-	# TODO split dataset
 	# TODO normalize dataset
-	# TODO build and return classifier
-	pass
+	knn = sk.neighbors.KNeighborsClassifier( weights='uniform' )
+	knn.fit( features, classes )
+	return knn
 
 def split_tab( features, classes, test_percent=0.3 ):
 	nbTests = int(len(features)*test_percent)
