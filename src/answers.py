@@ -49,7 +49,7 @@ def extract_dataset( meta ):
 		features.append( extract_features( elem ) )
 		classes.append( classids[elem['classid']] )
 	
-	return features, classes, classids
+	return features, classes, classnames
 	
 def train_knn( features ):
 	for i in range(0,len(meta)-1):
