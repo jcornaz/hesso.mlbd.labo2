@@ -7,15 +7,16 @@ import sklearn.metrics as skm
 import matplotlib.cm as cm
 from sklearn.neighbors import KNeighborsClassifier
 
-def curvature_hist( img, step=10, plot=False, nbins=10, vmin=0, vmax=0.4 ):    
+def curvature_hist( img, step=10, plot=False, nbins=10, vmin=0.03, vmax=0.3 ):    
 	curvatures = mlbd.curvature( img, step=step )
-	bins = np.linspace( vmin, vmax, nbins )
+	bins = np.linspace( vmin, vmax, nbins + 1 )
 	res, _ = np.histogram( curvatures, bins=bins, range=( vmin, vmax ) )
 	res = res / float( len( curvatures ) )
 	
 	if plot:
 		pl.title( 'histogram of curvatures' )
 		pl.bar( bins[1:], res, width=0.02, align='center' )
+		pl.xlim( vmin, vmax )
 	
 	return res
 
