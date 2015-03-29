@@ -58,7 +58,7 @@ def extract_dataset( meta, labelEncoder ):
 	return features, classes
 	
 def train_knn( features, classes ):
-	knn = KNeighborsClassifier( weights='uniform' )
+	knn = KNeighborsClassifier()
 	knn.fit( features, classes[:,0] )
 	return knn
 	
