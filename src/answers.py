@@ -63,3 +63,22 @@ def train_knn( features ):
 	# split dataset
 	# normalize dataset
 	# build a classifier
+
+def split_tab(features,classes, test_percent=0.25):
+	X_split = int(len(X)*test_percent)
+	y_split = int(len(y)*test_percent)
+	
+	X_test  = []#X[X_split:]
+	y_test  = []#y[y_split:]
+	
+	for i in range(0,X_split):
+		X_test.append(features.pop(random.randrange(len(features))))# pop a random features
+		
+	for i in range(0,y_split):
+		y_test.append(classes.pop(random.randrange(len(classes))))
+
+	X_train = features#X[0:X_split]
+	y_train = classes#y[0:y_split]
+	
+	return X_train, X_test, y_train, y_test 
+
