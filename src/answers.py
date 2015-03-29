@@ -3,6 +3,7 @@ import numpy as np
 import pylab as pl
 import cv2
 import sklearn as sk
+import sklearn.metrics as skm
 from sklearn.neighbors import KNeighborsClassifier
 
 def curvature_hist( img, step=10, plot=False, nbins=10, vmin=0, vmax=0.4):     
@@ -61,3 +62,9 @@ def train_knn( features, classes ):
 	knn = KNeighborsClassifier( weights='uniform' )
 	knn.fit( features, classes[:,0] )
 	return knn
+	
+def plot_report( y_pred, y_test, labelEncoder ):
+	report = skm.classification_report( y_test, y_pred, labels=np.arange(len(labelEncoder.classes_)), target_names=labelEncoder.classes_)
+	confmat = skm.confusion_matrix( y_test, y_pred )
+	mlbd.plot_confusion_matrix( confmat, labelEncoder.classes_ )
+	print report
