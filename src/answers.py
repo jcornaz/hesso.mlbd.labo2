@@ -52,14 +52,9 @@ def extract_dataset( meta ):
 				c.append(0)
 		classes.append(c)
 	
-	return [features, classes]
+	return features, classes
 	
-def train_knn( features ):
-	for i in range(0,len(meta)-1):
-		feature = extract_features( meta.iloc[i] )
-		# build input matrix
-		# build target matrix
-		
-	# split dataset
-	# normalize dataset
-	# build a classifier
+def train_knn( features, classes ):
+	# TODO split dataset
+	# TODO normalize dataset
+	# TODO build and return classifier
