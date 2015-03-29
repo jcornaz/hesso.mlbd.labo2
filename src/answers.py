@@ -4,6 +4,7 @@ import pylab as pl
 import cv2
 import copy
 import random
+import sklearn as sk
 
 def curvature_hist( img, step=10, plot=False, nbins=10, vmin=0, vmax=0.4):     
    cvt = mlbd.curvature(img, step=step)
@@ -54,10 +55,10 @@ def extract_dataset( meta ):
 	return features, classes, classids
 	
 def train_knn( features, classes ):
-	# TODO split dataset
 	# TODO normalize dataset
-	# TODO build and return classifier
-	pass
+	knn = sk.neighbors.KNeighborsClassifier( weights='uniform' )
+	knn.fit( features, classes )
+	return knn
 
 def split_tab( features, classes, test_percent=0.3 ):
 	nbTests = int(len(features)*test_percent)
