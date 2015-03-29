@@ -41,10 +41,11 @@ def create_classlabel_encoder( meta ):
 	
 def extract_features( meta_elem ):
 	img = mlbd.load_img( meta_elem['basename'] )
-	res = curvature_hist( img ).tolist()
-	res.append( ratio_hull_concave( img ) )
-	res.append( mlbd.eccentricity( img ) )
-	return np.matrix( res )
+	res = np.zeros((1,12))
+	res[0,0:10] = curvature_hist( img ).reshape((1,10))
+	res[0,10] = ratio_hull_concave( img )
+	res[0,11] = mlbd.eccentricity( img )
+	return res
 	
 def extract_dataset( meta, labelEncoder ):
 	features = np.zeros((len( meta ), 12))
