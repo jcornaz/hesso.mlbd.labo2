@@ -16,7 +16,7 @@ def curvature_hist( img, step=10, plot=False, nbins=10, vmin=0.03, vmax=0.3 ):
 	if plot:
 		pl.title( 'histogram of curvatures' )
 		pl.bar( bins[1:], res, width=0.02, align='center' )
-		pl.xlim( vmin, vmax )
+		pl.xlim( (vmin, vmax) )
 	
 	return res
 
