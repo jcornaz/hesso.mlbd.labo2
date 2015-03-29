@@ -2,9 +2,8 @@ import mlbd
 import numpy as np
 import pylab as pl
 import cv2
-import copy
-import random
 import sklearn as sk
+from sklearn.neighbors import KNeighborsClassifier
 
 def curvature_hist( img, step=10, plot=False, nbins=10, vmin=0, vmax=0.4):     
    cvt = mlbd.curvature(img, step=step)
@@ -59,6 +58,6 @@ def extract_dataset( meta, labelEncoder ):
 	
 def train_knn( features, classes ):
 	# TODO normalize dataset
-	knn = sk.neighbors.KNeighborsClassifier( weights='uniform' )
-	knn.fit( features, classes )
+	knn = KNeighborsClassifier( weights='uniform' )
+	knn.fit( features, classes[:,0] )
 	return knn
