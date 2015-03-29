@@ -7,18 +7,17 @@ import sklearn.metrics as skm
 import matplotlib.cm as cm
 from sklearn.neighbors import KNeighborsClassifier
 
-def curvature_hist( img, step=10, plot=False, nbins=10, vmin=0, vmax=0.4 ):     
-	cvt = mlbd.curvature( img, step=step )
-	bins = np.linspace( vmin, vmax, nbins + 1, endpoint=True )
-	h, _ = np.histogram( cvt, bins=bins, range=( vmin, vmax ) )
-	h = h / float( len( cvt ) )
+def curvature_hist( img, step=10, plot=False, nbins=10, vmin=0, vmax=0.4 ):    
+	curvatures = mlbd.curvature( img, step=step )
+	bins = np.linspace( vmin, vmax, nbins )
+	res, _ = np.histogram( curvatures, bins=bins, range=( vmin, vmax ) )
+	res = res / float( len( curvatures ) )
 	
 	if plot:
-		pl.title('histogram of curvatures')
-		pl.bar(bins[:-1], h, width=0.02, align='center')
-		pl.xlim((bins[0], bins[-1]))
+		pl.title( 'histogram of curvatures' )
+		pl.bar( bins[1:], res, width=0.02, align='center' )
 	
-	return h
+	return res
 
 def ratio_hull_concave(img):
 	cnt = mlbd.extract_contour(img)
@@ -41,10 +40,11 @@ def create_classlabel_encoder( meta ):
 	
 def extract_features( meta_elem ):
 	img = mlbd.load_img( meta_elem['basename'] )
-	res = curvature_hist( img ).tolist()
-	res.append( ratio_hull_concave( img ) )
-	res.append( mlbd.eccentricity( img ) )
-	return np.matrix( res )
+	res = np.zeros((1,12))
+	res[0,0:10] = curvature_hist( img ).reshape((1,10))
+	res[0,10] = ratio_hull_concave( img )
+	res[0,11] = mlbd.eccentricity( img )
+	return res
 	
 def extract_dataset( meta, labelEncoder ):
 	features = np.zeros((len( meta ), 12))
@@ -58,13 +58,14 @@ def extract_dataset( meta, labelEncoder ):
 	return features, classes
 	
 def train_knn( features, classes ):
-	knn = KNeighborsClassifier( weights='uniform' )
+	knn = KNeighborsClassifier()
 	knn.fit( features, classes[:,0] )
 	return knn
 	
-def plot_report( y_pred, y_test, labelEncoder ):
-	report = skm.classification_report( y_test, y_pred, labels=np.arange(len(labelEncoder.classes_)), target_names=labelEncoder.classes_)
-	confmat = skm.confusion_matrix( y_test, y_pred )
+def plot_report( y_pred, y_true, labelEncoder ):
+	report = skm.classification_report( y_true, y_pred, labels=np.arange(len(labelEncoder.classes_)), target_names=labelEncoder.classes_)
+	confmat = skm.confusion_matrix( y_true, y_pred )
 	pl.figure(figsize=(10, 10))
 	mlbd.plot_confusion_matrix(confmat, labelEncoder.classes_, cmap=cm.gray_r)
 	print report
+	return report
