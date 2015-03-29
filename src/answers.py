@@ -7,18 +7,20 @@ import sklearn.metrics as skm
 import matplotlib.cm as cm
 from sklearn.neighbors import KNeighborsClassifier
 
-def curvature_hist( img, step=10, plot=False, nbins=10, vmin=0, vmax=0.4 ):     
-	cvt = mlbd.curvature( img, step=step )
-	bins = np.linspace( vmin, vmax, nbins + 1, endpoint=True )
-	h, _ = np.histogram( cvt, bins=bins, range=( vmin, vmax ) )
-	h = h / float( len( cvt ) )
+def curvature_hist( img, step=10, plot=False, nbins=10, vmin=0, vmax=0.4 ):    
+	curvatures = mlbd.curvature( img, step=step )
+	bins = np.linspace( vmin, vmax, nbins )
+	res, _ = np.histogram( curvatures, bins=bins, range=( vmin, vmax ) )
+	res = res / float( len( curvatures ) )
+	
+	print bins
+	print res
 	
 	if plot:
-		pl.title('histogram of curvatures')
-		pl.bar(bins[:-1], h, width=0.02, align='center')
-		pl.xlim((bins[0], bins[-1]))
+		pl.title( 'histogram of curvatures' )
+		pl.bar( bins[1:], res, width=0.02, align='center' )
 	
-	return h
+	return res
 
 def ratio_hull_concave(img):
 	cnt = mlbd.extract_contour(img)
