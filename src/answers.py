@@ -37,34 +37,27 @@ def extract_dataset( meta ):
 	
 	features = []
 	classes = []
+	classnames = []
+	
 	for i in range( 0, len( meta ) - 1 ):
 		elem = meta.iloc[i]
 		if not elem['classid'] in classids :
 			classids[elem['classid']] = classid
+			classnames.append( elem['classid'] )
 			classid = classid + 1
 			
 	for i in range( 0, len( meta ) - 1 ):
 		elem = meta.iloc[i]
 		features.append( extract_features( elem ) )
-		c = []
-		for j in range( 0, len( classids ) ):
-			if classids[elem['classid']] == j:
-				c.append(1)
-			else:
-				c.append(0)
-		classes.append(c)
+		classes.append( classids[elem['classid']] )
 	
-	return [features, classes]
+	return features, classes, classids
 	
-def train_knn( features ):
-	for i in range(0,len(meta)-1):
-		feature = extract_features( meta.iloc[i] )
-		# build input matrix
-		# build target matrix
-		
-	# split dataset
-	# normalize dataset
-	# build a classifier
+def train_knn( features, classes ):
+	# TODO split dataset
+	# TODO normalize dataset
+	# TODO build and return classifier
+	pass
 
 def split_tab( features, classes, test_percent=0.3 ):
 	nbTests = int(len(features)*test_percent)
@@ -81,4 +74,3 @@ def split_tab( features, classes, test_percent=0.3 ):
 		y_test.append(y_train.pop(index))
 	
 	return X_train, y_train, X_test, y_test
-
