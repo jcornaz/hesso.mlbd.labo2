@@ -13,9 +13,6 @@ def curvature_hist( img, step=10, plot=False, nbins=10, vmin=0, vmax=0.4 ):
 	res, _ = np.histogram( curvatures, bins=bins, range=( vmin, vmax ) )
 	res = res / float( len( curvatures ) )
 	
-	print bins
-	print res
-	
 	if plot:
 		pl.title( 'histogram of curvatures' )
 		pl.bar( bins[1:], res, width=0.02, align='center' )
