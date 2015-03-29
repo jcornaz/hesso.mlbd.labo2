@@ -44,16 +44,16 @@ def extract_features( meta_elem ):
 	res = curvature_hist( img ).tolist()
 	res.append( ratio_hull_concave( img ) )
 	res.append( mlbd.eccentricity( img ) )
-	return res
+	return np.matrix( res )
 	
 def extract_dataset( meta, labelEncoder ):
-	features = []
-	classes = []
-				
+	features = np.zeros((len( meta ), 12))
+	classes = np.zeros((len( meta ), 1))
+	
 	for i in range( 0, len( meta ) - 1 ):
 		elem = meta.iloc[i]
-		features.append( extract_features( elem ) )
-		classes.append( labelEncoder.transform( elem['classid'] ) )
+		features[i,:] = extract_features( elem )
+		classes[i,:] = labelEncoder.transform( elem['classid'] )
 	
 	return features, classes
 	
