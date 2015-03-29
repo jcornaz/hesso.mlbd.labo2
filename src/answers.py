@@ -7,6 +7,12 @@ import sklearn.metrics as skm
 import matplotlib.cm as cm
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import MinMaxScaler
+from pybrain.datasets import ClassificationDataSet
+from sklearn.preprocessing import MultiLabelBinarizer
+from pybrain.tools.shortcuts     import buildNetwork
+from pybrain.supervised.trainers import BackpropTrainer
+from pybrain.structure.modules   import SoftmaxLayer
+from pybrain.utilities           import percentError
 
 def curvature_hist( img, step=10, plot=False, nbins=10, vmin=0.03, vmax=0.3 ):    
 	curvatures = mlbd.curvature( img, step=step )
@@ -72,6 +78,12 @@ def train_knn( features, classes ):
 	knn = KNeighborsClassifier()
 	knn.fit( features, classes[:,0] )
 	return knn
+
+#def train_fnn( features, classes, plot=False, test_size=0.2 ):
+
+	
+	#return fnn, x_test, y_test
+	
 	
 def plot_report( y_pred, y_true, labelEncoder ):
 	report = skm.classification_report( y_true, y_pred, labels=np.arange(len(labelEncoder.classes_)), target_names=labelEncoder.classes_)

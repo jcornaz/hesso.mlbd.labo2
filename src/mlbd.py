@@ -193,7 +193,7 @@ def plot_confusion_matrix(confmat, labels_names, ax=None, cmap=None):
     ax.set_ylabel('true label')
     pl.colorbar(cmim, shrink=0.7, orientation='horizontal', pad=0.01)
 	
-def pybrain_ds_from_Xy(X, y, binarizer):
+def pybrain_ds_from_Xy(X, y, binarizer, lencoder):
     """
     Args:
         binarizer: A MultiLabelBinarizer instance
