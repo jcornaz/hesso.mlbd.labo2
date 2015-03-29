@@ -54,7 +54,13 @@ def extract_dataset( meta ):
 				c.append(0)
 		classes.append(c)
 	
-	return [features, classes]
+	return features, classes
+	
+
+def train_knn( features, classes ):
+	# TODO split dataset
+	# TODO normalize dataset
+	# TODO build and return classifier
 	
 def train_knn( features ):
 	for i in range(0,len(meta)-1):
@@ -81,4 +87,3 @@ def split_tab( features, classes, test_percent=0.3 ):
 		y_test.append(y_train.pop(index))
 	
 	return X_train, y_train, X_test, y_test
-
