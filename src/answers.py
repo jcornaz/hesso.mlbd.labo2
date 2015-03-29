@@ -35,24 +35,21 @@ def extract_dataset( meta ):
 	
 	features = []
 	classes = []
+	classnames = []
+	
 	for i in range( 0, len( meta ) - 1 ):
 		elem = meta.iloc[i]
 		if not elem['classid'] in classids :
 			classids[elem['classid']] = classid
+			classnames.append( elem['classid'] )
 			classid = classid + 1
 			
 	for i in range( 0, len( meta ) - 1 ):
 		elem = meta.iloc[i]
 		features.append( extract_features( elem ) )
-		c = []
-		for j in range( 0, len( classids ) ):
-			if classids[elem['classid']] == j:
-				c.append(1)
-			else:
-				c.append(0)
-		classes.append(c)
+		classes.append( classids[elem['classid']] )
 	
-	return [features, classes]
+	return features, classes, classids
 	
 def train_knn( features ):
 	for i in range(0,len(meta)-1):
