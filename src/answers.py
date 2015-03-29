@@ -6,6 +6,7 @@ import sklearn as sk
 import sklearn.metrics as skm
 import matplotlib.cm as cm
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.preprocessing import MinMaxScaler
 
 def curvature_hist( img, step=10, plot=False, nbins=10, vmin=0.03, vmax=0.3 ):    
 	curvatures = mlbd.curvature( img, step=step )
@@ -46,6 +47,15 @@ def extract_features( meta_elem ):
 	res[0,10] = ratio_hull_concave( img )
 	res[0,11] = mlbd.eccentricity( img )
 	return res
+
+def normalize( features ):
+	nbi, nbf = features.shape
+	res = np.zeros((nbi,nbf))
+	for i in range(0,nbf-1):
+		scaler = MinMaxScaler()
+		scaler.fit( features[:,i] )
+		res[:,i] = scaler.transform( features[:,i] )
+	return res
 	
 def extract_dataset( meta, labelEncoder ):
 	features = np.zeros((len( meta ), 12))
@@ -56,7 +66,7 @@ def extract_dataset( meta, labelEncoder ):
 		features[i,:] = extract_features( elem )
 		classes[i,:] = labelEncoder.transform( elem['classid'] )
 	
-	return features, classes
+	return normalize( features ), classes
 	
 def train_knn( features, classes ):
 	knn = KNeighborsClassifier()
