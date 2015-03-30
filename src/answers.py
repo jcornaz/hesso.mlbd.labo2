@@ -79,10 +79,26 @@ def train_knn( features, classes ):
 	knn.fit( features, classes[:,0] )
 	return knn
 
-#def train_fnn( features, classes, plot=False, test_size=0.2 ):
+def train_fnn( ds_train, ds_test, n_hidden_units=17, lr_param=0.00001, momentum_param=0.9999, n_epochs=90, bias_param=True,  plot=True ):
 
+	fnn = buildNetwork(ds_train.indim, n_hidden_units, ds_train.outdim, outclass=SoftmaxLayer,bias=bias_param)
+
+	results = []
+
+	trainer = BackpropTrainer(fnn, ds_train, learningrate = lr_param, momentum = momentum_param )
+	epochs = range(0,n_epochs)
+
+	for i in epochs:
+		  trainer.trainEpochs(1)
+		  result_train = percentError(trainer.testOnClassData(),ds_train['class'] )
+		  result_test = percentError(trainer.testOnClassData(dataset=ds_test ), ds_test['class'] )
+		  results.append([result_train, result_test])
+
+	if plot:
+		pl.figure( figsize=(10,10) )
+		pl.plot( epochs, results)
 	
-	#return fnn, x_test, y_test
+	return fnn
 	
 	
 def plot_report( y_pred, y_true, labelEncoder ):
