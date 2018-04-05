@@ -1,4 +1,5 @@
-# Machine learning on big data laboratories for the HES-SO/master
+# Machine learning on big data laboratories
+For the HES-SO/master universtity (switzerland)
 
 ## Status
 This was a school project. It is no longer maintained and no support will ever be provided.
